@@ -1,0 +1,12 @@
+doctype html
+html
+ head
+  title Edit Grade
+  link(rel='stylesheet', href='/stylesheets/style.css')  
+ body
+  h1 Edit #{name}
+
+  form(action = "/updateGrade", method="POST")
+   input(type="text", name="id", value="#{id}")
+   input(type="text", name="name", value="#{name}")
+   input(type="submit", value="update")

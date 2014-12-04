@@ -1,0 +1,18 @@
+Ability to edit grade name from grade summary page
+Ability to edit student name, grade &
+	score in subject from student summary page
+Ability to edit subject name, max score, grade from subject summary page
+
+
+grade object:
+
+{ id: 1,
+  name: 'class 1',
+  students:
+   [ { id: 1, name: 'Vishnu' },
+     { id: 2, name: 'Mahesh' },
+     { id: 3, name: 'Parmatma' } ],
+  subjects:
+   [ { id: 1, name: 'Cricket' },
+     { id: 2, name: 'Hockey' },
+     { id: 3, name: 'KhoKho' } ] }

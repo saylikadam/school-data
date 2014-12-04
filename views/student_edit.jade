@@ -1,0 +1,46 @@
+doctype html
+html
+ head
+  title Edit Student
+  link(rel='stylesheet', href='/stylesheets/style.css')  
+ body
+  h1 Edit #{name}
+
+  form(action = "/updateStudent", method="POST")
+   h3 Student Details
+   div
+    table(border="2", width = "200px")
+     tr
+      th Id
+      th Name
+      th Grade Id
+      th Grade name
+     tr
+      td
+       input(type="text", name="student_id", value="#{id}")
+      td
+       input(type="text", name="student_name", value="#{name}")
+      td
+       input(type="text", name="grade_id", value="#{grade_id}")
+      td
+       input(type="text", name="grade_name", value="#{grade_name}", disabled)
+   h3 Student's subject Details
+   div
+    table(border="4")
+     tr
+      th Id
+      th Subject
+      th Max
+      th Score
+     each subject in subjects
+      tr
+       td
+        input(type="text", name="subject_id", value="#{subject.id}")
+       td
+        input(type="text", name="subject_name", value="#{subject.name}", disabled)
+       td
+        input(type="text", name="subject_maxScore", value="#{subject.maxScore}", disabled)
+       td
+        input(type="text", name="subject_score", value="#{subject.score}")
+   br
+   input(type="submit", value="update")
