@@ -63,6 +63,7 @@ describe('school_records',function(){
 			});
 		});
 	});
+
 	describe('#getGradeSummary',function(){
 		it('retrieves the summary of grade 1',function(done){
 			school_records.getGradeSummary(1,function(err,grade){
@@ -107,6 +108,34 @@ describe('school_records',function(){
 		});
 	});
 
+	describe('#getUpdateGrade',function(){
+		it('updates the name and id of the grade 1',function(done){
+			school_records.getGradeSummary(1, function(err, originalGrade){
+				var original = {id: originalGrade.id, name: originalGrade.name};
+				var change = {id: 1, name: '11th std'};
+				school_records.getUpdateGrade(change, function(err){
+					school_records.getGradeSummary(1, function(err, changedGrade){
+						assert.deepEqual(change, {id: changedGrade.id, name: changedGrade.name});
+						school_records.getUpdateGrade(original, function(err){});
+					});
+				});
+				done();
+			});
+		});
+		it('updates the name and id of the grade 2',function(done){
+			school_records.getGradeSummary(2, function(err, originalGrade){
+				var original = {id: originalGrade.id, name: originalGrade.name};
+				var change = {id: 2, name: '12th std'};
+				school_records.getUpdateGrade(change, function(err){
+					school_records.getGradeSummary(2, function(err, changedGrade){
+						assert.deepEqual(change, {id: changedGrade.id, name: changedGrade.name});
+						school_records.getUpdateGrade(original, function(err){});
+					});
+				});
+				done();
+			});
+		});
 
-})
+	});
 
+});

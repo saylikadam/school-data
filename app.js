@@ -27,8 +27,8 @@ app.get('/grade/:id',school_routes.get_grade_summary);
 app.get('/subject/:id',school_routes.get_subject_summary);
 app.get('/grade_edit/:id',school_routes.get_edit_grade);
 app.post('/updateGrade',school_routes.get_update_grade);
-// app.get('/student_edit/:id',school_routes.get_edit_student);
-// app.post('/updateStudent',school_routes.get_update_student);
+app.get('/student_edit/:id',school_routes.get_edit_student);
+app.post('/updateStudent',school_routes.get_update_student);
 
 
 // catch 404 and forward to error handler
