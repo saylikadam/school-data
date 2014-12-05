@@ -1,4 +1,4 @@
-var sqlite3 = require("sqlite3").verbose();
+var sqlite3 = require('sqlite3').verbose();
 
 var _getGrades = function(db,onComplete){
 	var q = 'select * from grades';
@@ -84,16 +84,17 @@ var _getEditStudent = function (id, db, onComplete) {
 	_getStudentSummary(id, db, onComplete);
 };
 
-// var _getUpdateStudent = function(student, db, onComplete){
-// 	var studentUpdateQuery = "update students set name = '"+student.student_name+"' where id='" +student.student_id+"'";
-// 	db.run(studentUpdateQuery,function(std_err){});
-// 	student.subject_id.forEach(function(sub_id,index){
-// 		var updateScoreQuery = "update scores set score='"+student.subject_score[index]+ "'where student_id='"+student.student_id+"' and subject_id = '"+student.sub_id+"'";	
-// 		db.run(updateScoreQuery, function(score_err){
-// 			onComplete(null);
-// 		});
-// 	});
-// };
+var _getUpdateStudent = function(student, db, onComplete){
+	var studentUpdateQuery = "update students set name = '"+student.name+"', grade_id = '" +student.grade_id + "' where id='" +student.id+"'";
+	db.run(studentUpdateQuery,function(std_err){
+		student.subjects.forEach(function(subject,index,array){
+			var updateScoreQuery = "update scores set score="+subject.score+" where student_id='"+student.id+"' and subject_id = '"+subject.id+"';";
+			db.run(updateScoreQuery, function(){
+				if(array.length-1 == index) onComplete(null);
+			});
+		});
+	});
+};
 
 var _getSubjectSummary = function(id,db,onComplete){
 	var subject_query = "select name, grade_id, maxScore from subjects where id ="+id;
@@ -101,15 +102,19 @@ var _getSubjectSummary = function(id,db,onComplete){
 		var student_query = "select id,name from students where grade_id="+subject.grade_id;
 		db.all(student_query,function(est,student){
 			subject.student = student;
-			subject.student.forEach(function(st){
+			var execute = function() {
+				var grade_query = "select name from grades where id="+subject.grade_id;
+				db.all(grade_query,function(egr,grade){
+					subject.grade = grade;
+					onComplete(null,subject);
+				});
+			};
+
+			student.forEach(function(st,index,array){
 				db.get('select score from scores where student_id ='+st.id+' and subject_id = '+ id,function(esc,score){
 					score && (st.score=score.score);
+					if(array.length-1 == index) execute();
 				});
-			});
-			var grade_query = "select name from grades where id="+subject.grade_id;
-			db.all(grade_query,function(egr,grade){
-				subject.grade = grade;
-				onComplete(null,subject);
 			});
 		});
 	});
@@ -140,8 +145,8 @@ var init = function(location){
 		getSubjectSummary: operate(_getSubjectSummary),
 		getEditGrade: operate(_getEditGrade),
 		getUpdateGrade: operate(_getUpdateGrade),
-		getEditStudent: operate(_getEditStudent)
-		// getUpdateStudent: operate(_getUpdateStudent)
+		getEditStudent: operate(_getEditStudent),
+		getUpdateStudent: operate(_getUpdateStudent)
 	};
 
 	return records;

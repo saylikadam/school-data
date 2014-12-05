@@ -64,8 +64,10 @@ exports.get_edit_student = function(req,res,next){
 		function(err,student){
 			if(!student)
 				next();
-			else
+			else{
+				console.log('from routes',student);
 				res.render('student_edit',student);
+			}
 		});
 };
 
@@ -82,15 +84,26 @@ exports.get_update_grade = function (req, res, next) {
 };
 
 exports.get_update_student = function (req, res, next) {
-	var id = req.body.student_id;
-	school_records.getUpdateStudent(req.body,
+	var id = req.body.id;
+	var body = bodyParser(req.body);
+	school_records.getUpdateStudent(body,
 		function(err){
 			if(err)
 				next();
 			else{
-				console.log(req.body);
 				res.redirect('/student/'+id);
 				res.end();
 			}
 		});
+};
+
+var bodyParser = function (body) {
+	var request = body;
+	request.subjects = [];
+	var updatedBody = request.subject_id.map(function(id,i){
+		return {'id':id,score:request.subject_score[i]};
+	});
+
+	request.subjects.updatedBody;
+	return request;
 };

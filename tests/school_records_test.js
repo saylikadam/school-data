@@ -2,7 +2,7 @@ var lib = require('../own_modules/school_records');
 var assert = require('chai').assert;
 var fs = require('fs');
 var dbFileData = fs.readFileSync('tests/data/school.db.backup');
-//CREATE TABLE STUDENTS(name text, grade text);
+//CREATE TABLE STUDENTS(name text, Grade text);
 //INSERT INTO STUDENTS VALUES ('Abu','one'), ('Babu','one')
 
 var school_records;
@@ -108,34 +108,93 @@ describe('school_records',function(){
 		});
 	});
 
-	describe('#getUpdateGrade',function(){
+	describe('#getUpdateGrade 1',function(){
 		it('updates the name and id of the grade 1',function(done){
-			school_records.getGradeSummary(1, function(err, originalGrade){
-				var original = {id: originalGrade.id, name: originalGrade.name};
-				var change = {id: 1, name: '11th std'};
-				school_records.getUpdateGrade(change, function(err){
-					school_records.getGradeSummary(1, function(err, changedGrade){
-						assert.deepEqual(change, {id: changedGrade.id, name: changedGrade.name});
-						school_records.getUpdateGrade(original, function(err){});
-					});
+			var change = {id: 1, name: '11th std'};
+			school_records.getUpdateGrade(change, function(err){
+				school_records.getGradeSummary(1, function(err, changedGrade){
+					assert.deepEqual(change, {id: changedGrade.id, name: changedGrade.name});
+					done();
 				});
-				done();
 			});
 		});
-		it('updates the name and id of the grade 2',function(done){
-			school_records.getGradeSummary(2, function(err, originalGrade){
-				var original = {id: originalGrade.id, name: originalGrade.name};
-				var change = {id: 2, name: '12th std'};
-				school_records.getUpdateGrade(change, function(err){
-					school_records.getGradeSummary(2, function(err, changedGrade){
-						assert.deepEqual(change, {id: changedGrade.id, name: changedGrade.name});
-						school_records.getUpdateGrade(original, function(err){});
-					});
-				});
-				done();
-			});
-		});
-
 	});
 
+
+	describe('#getEditStudent',function(){
+		it('retrieves the summary of the student Abu of id 1',function(done){
+			school_records.getEditStudent(1, function(err,s){				
+				assert.equal(s.name,'Abu');
+				assert.equal(s.grade_name,'1st std');
+				assert.deepEqual(s.subjects,[{id:1,name:'English-1',score:75,maxScore:100},
+					{id:2,name:'Maths-1',score:50,maxScore:100},
+					{id:3,name:'Moral Science',score:25,maxScore:50}]);
+				done();
+			});
+		});
+
+		it('retrieves nothing of the non existent student',function(done){
+			school_records.getEditStudent(9, function(err,s){
+				assert.notOk(err);
+				assert.notOk(s);				
+				done();
+			});
+		});
+	});
+
+	describe('#getUpdateStudent test 1',function(){
+		it('updates the summary of the student 1',function(done){
+			var change =   {
+				name: 'Ananthu', id: 1, grade_id: 1,
+				subjects: [ { id: 1, score: 12 }, { id: 2, score: 12 }, { id: 3, score: 12 } ] 
+			};
+			school_records.getUpdateStudent(change, function(err){
+				school_records.getStudentSummary(1, function(err, cStd){
+					var changed = {
+						name: cStd.name, id: cStd.id, grade_id: cStd.grade_id,
+						subjects: [
+							{ id: 1, score: cStd.subjects[0].score },
+							{ id: 2, score: cStd.subjects[1].score },
+							{ id: 3, score: cStd.subjects[2].score }] 
+					};
+					assert.deepEqual(change, changed);
+					done();
+				});
+			});
+		});
+	});
+
+	describe('#getUpdateStudent test 2',function(){
+		it('updates the summary of the student 1',function(done){
+			var change =   {
+				name: 'Prasenjit', id: 1, grade_id: 2,
+				subjects: [ { id: 1, score: 21 }, { id: 2, score: 15 }, { id: 3, score: 82 } ] 
+			};
+			school_records.getUpdateStudent(change, function(err){
+				school_records.getStudentSummary(1, function(err, cStd){
+					var changed = {
+						name: cStd.name, id: cStd.id, grade_id: cStd.grade_id,
+						subjects: [
+							{ id: 1, score: cStd.subjects[0].score },
+							{ id: 2, score: cStd.subjects[1].score },
+							{ id: 3, score: cStd.subjects[2].score }] };
+					assert.deepEqual(change, changed);
+					done();
+				});
+			});
+		});
+	});
+
+	describe('#getUpdateGrade 2',function(){
+		it('updates the name and id of the grade 2',function(done){
+			var change = {id: 2, name: '12th std'};
+			school_records.getUpdateGrade(change, function(err){
+				school_records.getGradeSummary(2, function(err, changedGrade){
+					var changed = {id: changedGrade.id, name: changedGrade.name};
+					assert.deepEqual(change, changed);
+					done();
+				});
+			});
+		});
+	});
 });
