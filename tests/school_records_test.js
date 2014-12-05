@@ -17,9 +17,9 @@ describe('school_records',function(){
 			school_records.getGrades(function(err,grades){
 				assert.deepEqual(grades,[{id:1,name:'1st std'},{id:2,name:'2nd std'}]);
 				done();
-			})
-		})
-	})
+			});
+		});
+	});
 
 	describe('#getStudentsByGrade',function(){
 		it('retrieves the students in the 2 grades',function(done){
@@ -28,9 +28,9 @@ describe('school_records',function(){
 				assert.lengthOf(grades[0].students,4);
 				assert.lengthOf(grades[1].students,3);
 				done();
-			})
-		})
-	})
+			});
+		});
+	});
 
 	describe('#getSubjectsByGrade',function(){
 		it('retrieves the subjects in the 2 grades',function(done){
@@ -39,9 +39,9 @@ describe('school_records',function(){
 				assert.lengthOf(grades[0].subjects,3);
 				assert.lengthOf(grades[1].subjects,0);
 				done();
-			})
-		})
-	})
+			});
+		});
+	});
 
 	describe('#getStudentSummary',function(){
 		it('retrieves the summary of the student Abu',function(done){
@@ -52,17 +52,17 @@ describe('school_records',function(){
 					{id:2,name:'Maths-1',score:50,maxScore:100},
 					{id:3,name:'Moral Science',score:25,maxScore:50}]);
 				done();
-			})
-		})
+			});
+		});
 
 		it('retrieves nothing of the non existent student',function(done){
 			school_records.getStudentSummary(9, function(err,s){
 				assert.notOk(err);
 				assert.notOk(s);				
 				done();
-			})
-		})
-	})
+			});
+		});
+	});
 	describe('#getGradeSummary',function(){
 		it('retrieves the summary of grade 1',function(done){
 			school_records.getGradeSummary(1,function(err,grade){
@@ -77,9 +77,9 @@ describe('school_records',function(){
 					{id:4,name:'Dabu'}]);
 				assert.equal(grade.id,1);
 				done();
-			})
-		})
-	})
+			});
+		});
+	});
 
 
 	describe('#getSubjectSummary',function(){
@@ -95,6 +95,18 @@ describe('school_records',function(){
 			});
 		});
 	});
+
+	describe('#getEditGrade',function(){
+		it('retrieves the name and id of the grade 1',function(done){
+			school_records.getEditGrade(1,function(err,grade){
+				assert.notOk(err);
+				assert.equal(grade.name,'1st std');	
+				assert.equal(grade.id,1);								
+				done();
+			});
+		});
+	});
+
 
 })
 

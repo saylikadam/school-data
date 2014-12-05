@@ -24,7 +24,6 @@ exports.get_student = function(req,res,next){
 			next();
 		else 
 		{
-			console.log(student);
 			res.render('student',student);
 		}
 	});

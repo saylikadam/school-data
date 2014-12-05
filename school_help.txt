@@ -16,3 +16,9 @@ grade object:
    [ { id: 1, name: 'Cricket' },
      { id: 2, name: 'Hockey' },
      { id: 3, name: 'KhoKho' } ] }
+
+{ student_id: '1',
+  student_name: 'Vishnu',
+  grade_id: '1',
+  subject_id: [ '1', '2', '3' ],
+  subject_score: [ '65', '30', '10' ] }
